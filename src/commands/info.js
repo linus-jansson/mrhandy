@@ -1,4 +1,6 @@
 const Discord = require('discord.js');
+// Link to limpan.dev
+// link to the server
 
 const embed = new Discord.MessageEmbed()
     .setColor('#66ff75')

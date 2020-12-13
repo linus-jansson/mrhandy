@@ -10,8 +10,12 @@ const prefix = '&';
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 client.commands = new Discord.Collection();
 
-// Kolla ifall det blivit en uppdatering i regler filen och skriv det kanalen
+// TODO: Kolla ifall det blivit en uppdatering i regler filen och skriv det kanalen
+// TODO: En bra log funktion som loggar errors och andra log grejer, sno från limpanweb sen när det är klart
+// TODO: När en ny användare joinar servern så ska de få rollen "comrade" 
+// alternativt att man får det efter man varit aktiv / varit medlem på servern en viss tid
 
+// command handler
 for (const file of commandFiles)
 {
     const command = require(`./commands/${file}`)
@@ -20,9 +24,8 @@ for (const file of commandFiles)
 
 client.once('ready', () => {
     console.log("READY");
-    client.user.setPresence({activity: { name: '🎉blip bop🎉' }, status: 'away'}).catch(console.error);
+    client.user.setPresence({activity: { name: 'blip bop👨‍💻🎉', type: "LISTENING" }, status: 'idle'}).catch(console.error);
 })
-
 
 client.on('message', message => {
     // Används så boten bara svara på meddelanden i huvudservern (Byt senare nu är det IDt för area 51)
