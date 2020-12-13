@@ -18,19 +18,19 @@ module.exports = {
             const posts = json.data.children.filter(post => post.data.over_18)
             
             if (!posts.length) 
-                return message.channel.send('It seems we are out of fresh memes!, Try again later.');
+                return message.channel.send('It seems we are out of the good stuff!, Try again later.');
             
             const randomnumber = Math.floor(Math.random() * posts.length)
             const post = posts[randomnumber]
             
             const embed = new Discord.MessageEmbed()
-                .setColor(0x00A2E8)
+                .setColor('#E600E6')
                 .setTitle(post.data.title)
                 .setImage(post.data.url)
                 // .addField("Other info:", "Up votes: " + post.data.ups + " / Comments: " + post.data.num_comments)
-                .setFooter(`By u/${post.data.author} on r/nsfw`)
+                .setFooter(`By u/${post.data.author} on r/nsfw`);
         
-                message.channel.send(embed)
+            message.channel.send(embed)
         })
         .catch(err => {
             message.channel.send("Something went wrong")
