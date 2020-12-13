@@ -1,35 +1,41 @@
 const dotenv = require('dotenv').config({path: '../.env'});
-
+const fs = require('fs');
 const Discord = require('discord.js');
+
 const client = new Discord.Client();
 
-const infoEmbed = new Discord.MessageEmbed()
-    .setColor('#66ff75')
-    .setDescription("blip blop")
-    .addFields(
-        { name: '\u200B', value: '\u200B' },
-		{ name: 'Dev website', value: 'https://limpan.dev/', inline: true },
-		{ name: 'Bot repo', value: 'https://github.com/linus-jansson/mrhandy/', inline: true },
-		{ name: 'Inline field title', value: 'Some value here', inline: true },
-    )
-    .setTimestamp()
-    .setFooter("Hello World");
-    
+// storea det här i en mongo databas sen eller en config fil kanske som vi på servern kan ändra
+// eller ha det straight up statiskt
+const prefix = '&';
+const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
+client.commands = new Discord.Collection();
 
-client.on('ready', () => {
+for (const file of commandFiles)
+{
+    const command = require(`./commands/${file}`)
+    client.commands.set(command.name, command)
+}
+
+client.once('ready', () => {
     console.log("READY");
     client.user.setPresence({activity: { name: '🎉blip bop🎉' }, status: 'away'}).catch(console.error);
+
+    // Kolla ifall det blivit en uppdatering i regler filen och skriv det kanalen
 })
 
 
-client.on('message', msg => {
-    
-    if (msg.author.bot) return;
+client.on('message', message => {
+    if (message.guild.id != '583235725948878858') return; // Används så boten bara svara på meddelanden i huvudservern (Byt senare nu är det IDt för area 51)
+    if (!message.content.startsWith(prefix) || message.author.bot) return; // Boten ska bara svara ifall det innehåller ett prefix; Boten ska inte heller svara på sig själv
 
-    if (msg.content == "hello")
-        msg.channel.send("hello")
+    const args = message.content.slice(prefix.length).trim().split(/ +/);
+    const content = args.shift().toLowerCase();
 
-    if (msg.content == "info")
-        msg.channel.send(infoEmbed)
+
+    // Kommandon
+    if (content == "info")
+        client.commands.get('info').execute(message)
+
 })
-client.login(process.env.DISCORD_TOKEN)
+
+client.login(process.env.DISCORD_TOKEN);
