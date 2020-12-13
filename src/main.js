@@ -36,8 +36,10 @@ client.on('message', message => {
     const content = args.shift().toLowerCase();
 
     // Kommandon
-    if (content == "info")
+    if (content == "info") // Info about the server and the bot
         client.commands.get('info').execute(message);
+    else if (content == "nsfw") // NSFW command
+        client.commands.get('nsfw').execute(message);
     
 })
 
