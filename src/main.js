@@ -8,6 +8,7 @@ const client = new Discord.Client();
 // eller ha det straight up statiskt
 const prefix = '&';
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
+
 client.commands = new Discord.Collection();
 
 // TODO: Kolla ifall det blivit en uppdatering i regler filen och skriv det kanalen
@@ -32,8 +33,9 @@ client.on('message', message => {
     if (message.channel.type != 'dm') {
         if (message.guild.id != '583235725948878858') return;
     }
-
-    if (!message.content.startsWith(prefix) || message.author.bot) return; // Boten ska bara svara ifall det innehåller ett prefix; Boten ska inte heller svara på sig själv
+    
+    // Boten ska bara svara ifall det innehåller ett prefix; Boten ska inte heller svara på sig själv
+    if (!message.content.startsWith(prefix) || message.author.bot) return; 
 
     const args = message.content.slice(prefix.length).trim().split(/ +/);
     const content = args.shift().toLowerCase();
